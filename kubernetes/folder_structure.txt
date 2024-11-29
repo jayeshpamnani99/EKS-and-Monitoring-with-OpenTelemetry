@@ -1,0 +1,97 @@
+otel-demo-yaml
+├── 01-namespaces
+│   └── otel-demo-namespace.yaml
+├── 02-core
+│   └── serviceaccount.yaml
+├── 03-opentelemetry-collector
+│   ├── 01-otelcol-serviceaccount.yaml
+│   ├── 02-otelcol-configmap.yaml
+│   ├── 03-otelcol-clusterrole.yaml
+│   ├── 04-otelcol-clusterrolebinding.yaml
+│   ├── 05-otelcol-service.yaml
+│   └── 06-otelcol-deployment.yaml
+├── 04-jaeger
+│   ├── 01-jaeger-serviceaccount.yaml
+│   ├── 02-jaeger-service.yaml
+│   └── 03-jaeger-deployment.yaml
+├── 05-prometheus
+│   ├── 01-prometheus-serviceaccount.yaml
+│   ├── 02-prometheus-configmap.yaml
+│   ├── 03-prometheus-clusterrole.yaml
+│   ├── 04-prometheus-clusterrolebinding.yaml
+│   ├── 05-prometheus-service.yaml
+│   └── 06-prometheus-deployment.yaml
+├── 06-grafana
+│   ├── 01-grafana-serviceaccount.yaml
+│   ├── 02-grafana-secret.yaml
+│   ├── 03-grafana-configmap.yaml
+│   ├── 04-grafana-clusterrole.yaml
+│   ├── 05-grafana-clusterrolebinding.yaml
+│   ├── 06-grafana-role.yaml
+│   ├── 07-grafana-rolebinding.yaml
+│   ├── 08-grafana-service.yaml
+│   └── 09-grafana-deployment.yaml
+├── 07-opensearch
+│   ├── 01-opensearch-poddisruptionbudget.yaml
+│   ├── 02-opensearch-configmap.yaml
+│   ├── 03-opensearch-service.yaml
+│   └── 04-opensearch-statefulset.yaml
+└── 08-application
+    ├── accountingservice
+    │   └── 01-accountingservice-deployment.yaml
+    ├── adservice
+    │   ├── 01-adservice-service.yaml
+    │   └── 02-adservice-deployment.yaml
+    ├── cartservice
+    │   ├── 01-cartservice-service.yaml
+    │   └── 02-cartservice-deployment.yaml
+    ├── checkoutservice
+    │   ├── 01-checkoutservice-service.yaml
+    │   └── 02-checkoutservice-deployment.yaml
+    ├── currencyservice
+    │   ├── 01-currencyservice-service.yaml
+    │   └── 02-currencyservice-deployment.yaml
+    ├── emailservice
+    │   ├── 01-emailservice-service.yaml
+    │   └── 02-emailservice-deployment.yaml
+    ├── flagd
+    │   ├── 01-flagd-configmap.yaml
+    │   ├── 02-flagd-service.yaml
+    │   └── 03-flagd-deployment.yaml
+    ├── frauddetectionservice
+    │   └── 01-frauddetectionservice-deployment.yaml
+    ├── frontend
+    │   ├── 01-frontend-service.yaml
+    │   └── 02-frontend-deployment.yaml
+    ├── frontendproxy
+    │   ├── 01-frontendproxy-service.yaml
+    │   └── 02-frontendproxy-deployment.yaml
+    ├── imageprovider
+    │   ├── 01-imageprovider-service.yaml
+    │   └── 02-imageprovider-deployment.yaml
+    ├── kafka
+    │   ├── 01-kafka-service.yaml
+    │   └── 02-kafka-deployment.yaml
+    ├── loadgenerator
+    │   ├── 01-loadgenerator-service.yaml
+    │   └── 02-loadgenerator-deployment.yaml
+    ├── paymentservice
+    │   ├── 01-paymentservice-service.yaml
+    │   └── 02-paymentservice-deployment.yaml
+    ├── productcatalogservice
+    │   ├── 01-productcatalogservice-service.yaml
+    │   └── 02-productcatalogservice-deployment.yaml
+    ├── quoteservice
+    │   ├── 01-quoteservice-service.yaml
+    │   └── 02-quoteservice-deployment.yaml
+    ├── recommendationservice
+    │   ├── 01-recommendationservice-service.yaml
+    │   └── 02-recommendationservice-deployment.yaml
+    ├── shippingservice
+    │   ├── 01-shippingservice-service.yaml
+    │   └── 02-shippingservice-deployment.yaml
+    └── valkey
+        ├── 01-valkey-service.yaml
+        └── 02-valkey-deployment.yaml
+
+28 directories, 67 files
