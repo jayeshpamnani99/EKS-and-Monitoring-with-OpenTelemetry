@@ -1,0 +1,122 @@
+prometheus:
+  configmapReload:
+    prometheus:
+      enabled: true
+  prometheus-pushgateway:
+    enabled: true
+
+  kube-state-metrics:
+    enabled: true
+
+  prometheus-node-exporter:
+    enabled: true
+
+  serverFiles:
+    prometheus.yml:
+      scrape_configs:
+        - job_name: 'otel-collector'
+          honor_labels: true
+          kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                own_namespace: true
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_opentelemetry_community_demo]
+              action: keep
+              regex: true
+        - job_name: 'kube-state-metrics'
+          static_configs:
+            - targets: ['my-otel-demo-kube-state-metrics.otel-demo-helm:8080']
+        - job_name: 'node-exporter'
+          static_configs:
+            - targets: ['my-otel-demo-prometheus-node-exporter.otel-demo-helm:9100']
+        - job_name: 'pushgateway'
+          static_configs:
+            - targets: ['my-otel-demo-prometheus-pushgateway.otel-demo-helm:9091']
+
+opentelemetry-collector:
+  config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            # Since this collector needs to receive data from the web, enable cors for all origins
+            # `allowed_origins` can be refined for your deployment domain
+            cors:
+              allowed_origins:
+                - "http://*"
+                - "https://*"
+      httpcheck/frontendproxy:
+        targets:
+          - endpoint: 'http://{{ include "otel-demo.name" . }}-frontendproxy:8080'
+      redis:
+        endpoint: "valkey-cart:6379"
+        collection_interval: 10s
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: 'kube-state-metrics'
+              static_configs:
+                - targets: ['kube-state-metrics.kube-system:8080']
+            - job_name: 'node-exporter'
+              static_configs:
+                - targets: ['node-exporter.kube-system:9100']
+    exporters:
+      ## Create an exporter to Jaeger using the standard `otlp` export format
+      otlp:
+        endpoint: '{{ include "otel-demo.name" . }}-jaeger-collector:4317'
+        tls:
+          insecure: true
+      # Create an exporter to Prometheus (metrics)
+      otlphttp/prometheus:
+        endpoint: 'http://{{ include "otel-demo.name" . }}-prometheus-server:9090/api/v1/otlp'
+        tls:
+          insecure: true
+      opensearch:
+        logs_index: otel
+        http:
+          endpoint: "http://otel-demo-opensearch:9200"
+          tls:
+            insecure: true
+
+    processors:
+      # This processor is used to help limit high cardinality on next.js span names
+      # When this PR is merged (and released) we can remove this transform processor
+      # https://github.com/vercel/next.js/pull/64852
+      transform:
+        error_mode: ignore
+        trace_statements:
+          - context: span
+            statements:
+              # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
+              - replace_pattern(name, "\\?.*", "")
+              - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+      resource:
+        attributes:
+        - key: service.instance.id
+          from_attribute: k8s.pod.uid
+          action: insert
+
+    connectors:
+      spanmetrics: {}
+
+    service:
+      pipelines:
+        traces:
+          processors: [memory_limiter, resource, transform, batch]
+          exporters: [otlp, debug, spanmetrics]
+        metrics:
+          receivers: [httpcheck/frontendproxy, redis, prometheus, otlp, spanmetrics]
+          processors: [memory_limiter, resource, batch]
+          exporters: [otlphttp/prometheus, debug]
+        logs:
+          processors: [memory_limiter, resource, batch]
+          exporters: [opensearch, debug]
+
+
+
+components:
+  frontendProxy:
+    service:
+      type: LoadBalancer
+
