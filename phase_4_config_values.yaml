@@ -120,3 +120,18 @@ components:
     service:
       type: LoadBalancer
 
+grafana:
+  enabled: true
+  assertNoLeakedSecrets: false
+  grafana.ini:
+    smtp:
+      enabled: true
+      host: "email-smtp.us-east-1.amazonaws.com:587"  # Replace with the AWS SES SMTP endpoint
+      user: "AKIATQZCSKRTTHPHSB4Z"   # Replace with your AWS SES SMTP username
+      password: "BPbKpZVL0iDjZbgWgn4g/NzhAMB3T6fqxeJW/e/P6Mks"  # Replace with your AWS SES SMTP password
+      from_address: "jpamnani@umd.edu"  # Replace with the email address used in AWS SES
+      from_name: "Grafana Alerts"  # Sender name
+      startTLS_policy: "OpportunisticStartTLS"
+    unified_alerting:
+      enabled: true
+      email_notifications_enabled: true
