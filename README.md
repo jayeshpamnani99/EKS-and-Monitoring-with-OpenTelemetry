@@ -83,12 +83,7 @@ This phase enhances monitoring and alerting using Prometheus, Grafana, and OpenT
 
 ## **Contributors**
 - Group 11 Team Members:
-  - [Your Name]
-  - [Your Name]
-  - [Your Name]
-
----
-
-## **License**
-This project is licensed under the MIT License. See `LICENSE` for more details.
-```
+  - Manav Gupta
+  - Jayesh Pamnani
+  - Chetan Kumar
+  - Sagar Wagh
